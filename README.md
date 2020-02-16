@@ -33,7 +33,7 @@
 * scrapy
 * pymongo
 
-###2 修改配置
+### 2 修改配置
 1.修改config目录下config.py文件中的mongodb连接配置
 2.修改EngineStar.py里的 proxy_spiders_list 和 your_spiders_list
 3.运行EngineStar.py即可. 项目会生成2个进程.一个是爬代理ip的进程,另一个是自定义蜘蛛的进程.第一个进程跑完再会去运行第二个进程
