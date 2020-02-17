@@ -1,6 +1,6 @@
 # ipproxy_pool
 #### 隔离在家太无聊催生了这个项目...
-#### 很多网站都会有基本的反爬行机制.例如检测请求头中的user-agent、限制短时间内ip的访问频率、ip大量重复会被Ban之类.那么反ban机制之一就是ip代理池了.此项目目前仅仅爬取几个免费代理网站的代理Ip、验证连接失败删掉无效ip、存入mongodb库供自定义爬虫调用.
+#### 很多网站都会有基本的反爬行机制.那么反ban机制之一就是ip代理池了.此项目目前仅仅爬取几个免费代理网站的代理Ip、验证连接失败删掉无效ip、存入mongodb库供自定义爬虫调用.后期会更新更多功能.
 
 
 
@@ -38,8 +38,9 @@
 
 ### 2 修改配置
 1.修改config目录下config.py文件中的mongodb连接配置 <br/>
-2.修改EngineStar.py里的 proxy_spiders_list 和 your_spiders_list<br/>
-3.运行EngineStar.py即可. 项目会生成2个进程.一个是爬代理ip的进程,另一个是自定义蜘蛛的进程.第一个进程跑完再会去运行第二个进程<br/>
+2.在你需要代理的自定义爬虫项目里的Request方法加上meta={'proxy':''}参数<br/>
+3.修改EngineStar.py里的 your_spiders_list<br/>
+4.运行EngineStar.py即可. 项目会生成2个进程.一个是爬代理ip的进程,另一个是自定义蜘蛛的进程.第一个进程跑完再会去运行第二个进程<br/>
 
 ### 最后
 
