@@ -25,13 +25,14 @@
 * spiders目录的proxySpiders目录存放爬代理ip的蜘蛛；yourSpider目录存放爬业务的蜘蛛
 
 
-##使用说明
-### 1 安装依赖
+## 使用说明
+### 1 项目环境
+* python 3.6或以上
 你需要通过 pip 安装以下依赖：
 
-* requests
-* scrapy
-* pymongo
+* requests version:lastest
+* scrapy version:lastest
+* pymongo version:lastest
 
 ### 2 修改配置
 1.修改config目录下config.py文件中的mongodb连接配置
