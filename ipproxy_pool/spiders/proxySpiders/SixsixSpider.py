@@ -1,4 +1,3 @@
-import re
 import scrapy
 from scrapy import Request
 from ipproxy_pool.items import IpproxyPoolItem

@@ -1,4 +1,4 @@
-import re
+
 import scrapy
 from scrapy import Request
 from ipproxy_pool.items import IpproxyPoolItem
@@ -42,12 +42,10 @@ class kuaidailiSpider(scrapy.Spider):
             item['agent'] = self.agent
             item['ip_addr'] = info.xpath('./td[1]/text()').get()
             item['port'] = info.xpath('./td[2]/text()').get()
-
             item['types'] = types[info.xpath('./td[3]/text()').get()]
             item['protocol'] = info.xpath('./td[4]/text()').get()
             item['country'] = 'Cn'
             item['area'] = info.xpath('./td[5]/text()').get()
-
             item['speed'] = info.xpath('./td[6]/text()').re_first(r'[1-9]\d*')
             item['time'] = ''
             item['survival_time'] = ''
