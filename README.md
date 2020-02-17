@@ -18,7 +18,7 @@
 
 
 * EngineStar.py是项目主入口文件.负责启动爬虫
-* config目录下的config.py文件是项目的运行配置文件.
+* config目录下的config.py是项目的运行配置文件.
 * db目录下的MongodbManager是初始化mongodb连接的类，model目录的proxymodel.py负责项目初始化时创建mongodb的database、代理ip的筛选、奖惩制度等等
 * middlewares 目录是放自定义中间件 proxyMiddleware.py有2个职责责 1.设置请求的代理 2.处理连接超时或失败的ip；RandomUserAgentMiddleware.py负责设置请求头随机user-agent
 * requester目录的requestEnginer.py负责1.把下载回来的数据过滤,2.验证ip的有效性3.一些请求任务
