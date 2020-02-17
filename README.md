@@ -26,9 +26,10 @@
 
 
 ## 使用说明
-<br/>
+
 ### 1 项目环境
 * python 3.6或以上
+<br/>
 你需要通过 pip 安装以下依赖：
 
 * requests version:lastest
