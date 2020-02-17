@@ -7,15 +7,45 @@
 ## 项目说明
 #### 目录结构
 <pre>
-ipproxy_pool
----config
------- db
----------model
----middlewares
----requester
----spiders
-------proxySpiders
-------yourSpider
+|-- undefined
+    |-- .gitignore
+    |-- EngineStar.py
+    |-- README.md
+    |-- scrapy.cfg
+    |-- ipproxy_pool
+        |-- items.py
+        |-- middlewares.py
+        |-- pipelines.py
+        |-- settings.py
+        |-- utils.py
+        |-- __init__.py
+        |-- config
+        |   |-- config.py
+        |   |-- __init__.py
+        |-- db
+        |   |-- MongodbManager.py
+        |   |-- __init__.py
+        |   |-- model
+        |       |-- proxymodel.py
+        |       |-- __init__.py
+        |-- middlewares
+        |   |-- proxyMiddleware.py
+        |   |-- RandomUserAgentMiddleware.py
+        |   |-- __init__.py
+        |-- requester
+        |   |-- requestEnginer.py
+        |   |-- __init__.py
+        |-- spiders
+            |-- __init__.py
+            |-- proxySpiders
+            |   |-- KuaidailiSpider.py
+            |   |-- SixsixSpider.py
+            |   |-- xiciSpider.py
+            |   |-- __init__.py
+            |-- yourSpider
+            |   |-- TestSpider.py
+            |   |-- __init__.py
+            
 
 </pre>
 * EngineStar.py是项目主入口文件.负责启动爬虫
