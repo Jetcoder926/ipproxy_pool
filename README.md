@@ -9,7 +9,7 @@
 <pre>
 |-- undefined
     |-- .gitignore
-    |-- EngineStar.py
+    |-- EngineStart.py
     |-- README.md
     |-- scrapy.cfg
     |-- ipproxy_pool
@@ -48,7 +48,7 @@
             
 
 </pre>
-* EngineStar.py是项目主入口文件.负责启动爬虫
+* EngineStart.py是项目主入口文件.负责启动爬虫
 * config目录下的`config.py`是项目的运行配置文件.
 * db目录下的`MongodbManager`是初始化mongodb连接的类，model目录的`proxymodel.py`负责项目初始化时创建mongodb的database、代理ip的筛选、奖惩制度等等
 * middlewares 目录是放自定义中间件 `proxyMiddleware.py`有2个职责责 1.设置请求的代理 2.处理连接超时或失败的ip；`RandomUserAgentMiddleware.py`负责设置请求头随机user-agent`
@@ -70,8 +70,8 @@
 ### 2 修改配置
 1.修改config目录下`config.py`文件中的mongodb连接配置 <br/>
 2.在你需要代理的自定义爬虫项目里的Request方法加上meta={'proxy':''}参数<br/>
-3.修改`EngineStar.py`里的 `your_spiders_list`<br/>
-4.运行`EngineStar.py`即可. 项目会生成2个进程.一个是爬代理ip的进程,另一个是自定义蜘蛛的进程.第一个进程跑完再会去运行第二个进程<br/>
+3.修改`EngineStart.py`里的 `your_spiders_list`<br/>
+4.运行`EngineStart.py`即可. 项目会生成2个进程.一个是爬代理ip的进程,另一个是自定义蜘蛛的进程.第一个进程跑完再会去运行第二个进程<br/>
 
 ## 参考资料
 https://www.osgeo.cn/scrapy/index.html<br/>
