@@ -43,8 +43,10 @@
 4.运行EngineStar.py即可. 项目会生成2个进程.一个是爬代理ip的进程,另一个是自定义蜘蛛的进程.第一个进程跑完再会去运行第二个进程<br/>
 
 ## 参考资料
-https://www.osgeo.cn/scrapy/index.html
+https://www.osgeo.cn/scrapy/index.html<br/>
 https://docs.python.org/zh-cn/3/library/index.html
+
+
 ## 最后
 
 #### 中国必胜,武汉必胜 -- 2020
