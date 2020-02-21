@@ -1,3 +1,4 @@
+import re
 import scrapy
 from scrapy import Request
 from ipproxy_pool.items import IpproxyPoolItem
@@ -13,7 +14,7 @@ class xiciSpider(scrapy.Spider):
         'ITEM_PIPELINES': {
             'ipproxy_pool.pipelines.XiciProxyPipeline': 1
         },
-
+        'DOWNLOADER_MIDDLEWARES':{}
     }
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',

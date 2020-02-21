@@ -1,10 +1,11 @@
+import re
 import scrapy
 from scrapy import Request
 from ipproxy_pool.items import IpproxyPoolItem
-from ipproxy_pool.config.config import THREADPOOL_NUM
+
 from scrapy.selector import Selector
 
-num = THREADPOOL_NUM
+num = 100
 port = 80
 
 
@@ -16,7 +17,7 @@ class SixsixSpider(scrapy.Spider):
         'ITEM_PIPELINES': {
             'ipproxy_pool.pipelines.SixsixProxyPipeline': 1
         },
-
+        'DOWNLOADER_MIDDLEWARES': {}
     }
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -42,7 +43,7 @@ class SixsixSpider(scrapy.Spider):
         for i, info in enumerate(infos):
             item['agent'] = self.agent
             item['ip_addr'] = infos[i]
-            item['port'] = port
+            item['port'] = str(port)
             item['types'] = 0
             item['protocol'] = 'HTTP'
             item['country'] = 'Cn'

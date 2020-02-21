@@ -6,53 +6,23 @@
 
 ## 项目说明
 #### 目录结构
-<pre>
-    |-- .gitignore
-    |-- EngineStart.py
-    |-- README.md
-    |-- scrapy.cfg
-    |-- ipproxy_pool
-        |-- items.py
-        |-- middlewares.py
-        |-- pipelines.py
-        |-- settings.py
-        |-- utils.py
-        |-- __init__.py
-        |-- config
-        |   |-- config.py
-        |   |-- __init__.py
-        |-- db
-        |   |-- MongodbManager.py
-        |   |-- __init__.py
-        |   |-- model
-        |       |-- proxymodel.py
-        |       |-- __init__.py
-        |-- middlewares
-        |   |-- proxyMiddleware.py
-        |   |-- RandomUserAgentMiddleware.py
-        |   |-- __init__.py
-        |-- requester
-        |   |-- requestEnginer.py
-        |   |-- __init__.py
-        |-- spiders
-            |-- __init__.py
-            |-- proxySpiders
-            |   |-- KuaidailiSpider.py
-            |   |-- SixsixSpider.py
-            |   |-- xiciSpider.py
-            |   |-- __init__.py
-            |-- yourSpider
-            |   |-- TestSpider.py
-            |   |-- __init__.py
-            
+* ipproxy_pool
+	+ config
+	+ db
+    	- model
+	+ middlewares
+	+ requester
+	+ spiders
+		- proxySpiders
+		- yourSpider
 
-</pre>
-* EngineStart.py是项目主入口文件.负责启动爬虫
-* config目录下的`config.py`是项目的运行配置文件.
-* db目录下的`MongodbManager`是初始化mongodb连接的类，model目录的`proxymodel.py`负责项目初始化时创建mongodb的database、代理ip的筛选、奖惩制度等等
-* middlewares 目录是放自定义中间件 `proxyMiddleware.py`有2个职责责 1.设置请求的代理 2.处理连接超时或失败的ip；`RandomUserAgentMiddleware.py`负责设置请求头随机user-agent`
-* requester目录的`requestEnginer.py`是个功能类给pipeline调用 包括功能有1.验证代理地址 2.定时过滤ip的任务
-* spiders目录的`proxySpiders`目录存放爬代理ip的蜘蛛；`yourSpider`目录存放你自定义的爬虫项目
+
+* EngineStar.py是项目主入口文件.负责启动爬虫
+* config目录下的config.py是项目的运行配置文件.
+* db目录下的MongodbManager是初始化mongodb连接的类，model目录的proxymodel.py负责项目初始化时创建mongodb的database、代理ip的筛选、奖惩制度等等
+* middlewares 目录是放自定义中间件 proxyMiddleware.py有2个职责责 1.设置请求的代理 2.处理连接超时或失败的ip；RandomUserAgentMiddleware.py负责设置请求头随机user-agent
+* requester目录的requestEnginer.py负责1.把下载回来的数据过滤,2.验证ip的有效性3.一些请求任务
+* spiders目录的proxySpiders目录存放爬代理ip的蜘蛛；yourSpider目录存放你自定义的爬虫项目
 
 
 ## 使用说明
@@ -67,10 +37,10 @@
 * pymongo version:lastest
 
 ### 2 修改配置
-1.修改config目录下`config.py`文件中的mongodb连接配置 <br/>
+1.修改config目录下config.py文件中的mongodb连接配置 <br/>
 2.在你需要代理的自定义爬虫项目里的Request方法加上meta={'proxy':''}参数<br/>
-3.修改`EngineStart.py`里的 `your_spiders_list`<br/>
-4.运行`EngineStart.py`即可. 项目会生成2个进程.一个是爬代理ip的进程,另一个是自定义蜘蛛的进程.第一个进程跑完再会去运行第二个进程<br/>
+3.修改EngineStar.py里的 your_spiders_list<br/>
+4.运行EngineStar.py即可. 项目会生成2个进程.一个是爬代理ip的进程,另一个是自定义蜘蛛的进程.第一个进程跑完再会去运行第二个进程<br/>
 
 ## 参考资料
 https://www.osgeo.cn/scrapy/index.html<br/>

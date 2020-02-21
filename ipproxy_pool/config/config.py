@@ -1,4 +1,7 @@
 import logging, datetime
+
+
+
 def get_log_config():
     # 将 requests的日志级别设成 WARNING
     LOG_LEVEL = logging.WARNING
@@ -22,10 +25,14 @@ MONGODB_PROXY_COLLECTION = 'proxy_list'
 # 冷启动的判断标准--库中代理ip的数量
 # COLD_START_MIN_REQUIREMENT = 1000
 
-# 验证代理地址的线程池的总数
-THREADPOOL_NUM = 50
+
 
 # 验证代理地址的网站
 Validated_url = 'http://httpbin.org/get'
+
+
+
+# 验证代理地址的线程池的总数
+THREADPOOL_NUM = 50
 
 
