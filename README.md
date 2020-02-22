@@ -4,7 +4,7 @@
 
 
 
-## 项目说明
+>## 项目说明
 #### 目录结构
 <pre>
 |-- ipproxy_pool
@@ -44,9 +44,9 @@
 * service目录下是一些公共功能类.
 * spiders目录的`proxySpiders`目录存放代理ip的爬虫项目；`yourSpider`目录是存放自定义的爬虫项目
 
-## 使用说明
+> ## 使用说明
 
-> ### 1 项目环境
+### 1 项目环境
 * python 3.6或以上
 <br/>
 你需要通过 pip 安装以下依赖：
@@ -56,7 +56,7 @@
 * pymongo 
 * apscheduler 
 
-> ### 2 修改配置
+### 2 修改配置
 1.修改config目录下`config.py`文件中的mongodb连接配置 <br/>
 2.在你需要代理的自定义爬虫项目里的Request方法加上`meta={'proxy':''}`参数<br/>
 3.修改`EngineStar.py`里的 your_spiders_list AND 运行`EngineStar.py`即可<br/>
@@ -65,7 +65,7 @@
 &emsp;4.2 chmod +x task.sh<br/>
 &emsp;4.3 ./tash.sh start 启动任务脚本. 停止脚本的命令: ./task.sh stop
 
-> ## 参考资料
+>## 参考资料
 https://www.osgeo.cn/scrapy/index.html<br/>
 https://docs.python.org/zh-cn/3/library/index.html<br/>
 https://juejin.im/post/5d3718c35188251b2569f9e8
