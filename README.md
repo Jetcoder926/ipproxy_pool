@@ -37,40 +37,40 @@
         |-- yourSpider
 </pre>
 
-* config目录下的config.py是项目的运行配置文件.
-* db目录下的MongodbManager是初始化mongodb连接的类，model目录的proxymodel.py负责项目初始化时创建mongodb的database、代理ip的筛选、奖惩制度等等
-* middlewares 目录是放自定义中间件 proxyMiddleware.py有2个职责责 1.设置请求的代理 2.处理连接超时或失败的ip；RandomUserAgentMiddleware.py负责设置请求头随机user-agent
-* requester目录的requestEnginer.py负责验证爬取的代理ip有效性.
+* config目录下的`config.py`是项目的运行配置文件.
+* db目录下的MongodbManager是初始化mongodb连接的类，model目录的`proxymodel.py`负责项目初始化时创建mongodb的database、代理ip的筛选、奖惩制度等等
+* middlewares 目录是放自定义中间件 `proxyMiddleware.py`有2个职责责 1.设置请求的代理 2.处理连接超时或失败的ip；`RandomUserAgentMiddleware.py`负责设置请求头随机user-agent
+* requester目录的`requestEnginer.py`负责验证爬取的代理ip有效性.
 * service目录下是一些公共功能类.
-* spiders目录的proxySpiders目录存放代理ip的爬虫项目；yourSpider目录是存放自定义的爬虫项目
+* spiders目录的`proxySpiders`目录存放代理ip的爬虫项目；`yourSpider`目录是存放自定义的爬虫项目
 
 ## 使用说明
 
-### 1 项目环境
+> ### 1 项目环境
 * python 3.6或以上
 <br/>
 你需要通过 pip 安装以下依赖：
 
-* requests version:lastest
-* scrapy version:lastest
-* pymongo version:lastest
-* apscheduler version:lastest
+* requests 
+* scrapy 
+* pymongo 
+* apscheduler 
 
-### 2 修改配置
-> 1.修改config目录下`config.py`文件中的mongodb连接配置 <br/>
-> 2.在你需要代理的自定义爬虫项目里的Request方法加上`meta={'proxy':''}`参数<br/>
-> 3.修改`EngineStar.py`里的 your_spiders_list AND 运行`EngineStar.py`即可<br/>
-> 4.启动代理爬虫的方式: <br/>
+> ### 2 修改配置
+1.修改config目录下`config.py`文件中的mongodb连接配置 <br/>
+2.在你需要代理的自定义爬虫项目里的Request方法加上`meta={'proxy':''}`参数<br/>
+3.修改`EngineStar.py`里的 your_spiders_list AND 运行`EngineStar.py`即可<br/>
+4.启动代理爬虫的方式: <br/>
 &emsp;4.1 进入项目根目录<br/>
 &emsp;4.2 chmod +x task.sh<br/>
 &emsp;4.3 ./tash.sh start 启动任务脚本. 停止脚本的命令: ./task.sh stop
 
-## 参考资料
+> ## 参考资料
 https://www.osgeo.cn/scrapy/index.html<br/>
 https://docs.python.org/zh-cn/3/library/index.html<br/>
 https://juejin.im/post/5d3718c35188251b2569f9e8
 
 
-## 最后
+> ## 最后
 
-> 欢迎fork&star我的项目.刚写python不久.如果你有更好的建议欢迎issues或联系我
+欢迎fork&star我的项目.刚写python不久.如果你有更好的建议欢迎issues或联系我
