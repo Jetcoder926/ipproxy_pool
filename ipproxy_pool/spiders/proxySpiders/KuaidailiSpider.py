@@ -1,5 +1,5 @@
 import re
-import scrapy
+import scrapy,time
 from scrapy import Request
 from ipproxy_pool.items import IpproxyPoolItem
 
@@ -54,6 +54,7 @@ class kuaidailiSpider(scrapy.Spider):
             item['verify_time'] = info.xpath('./td[7]/text()').get()
             item['failures_times'] = 0
             item['score'] = 10
+            item['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
             yield item
         #
         next_page_num = int(response.url[-1]) + 1

@@ -1,7 +1,6 @@
 from scrapy.crawler import CrawlerProcess
 from ipproxy_pool.config.config import get_log_config
 from scrapy.utils.project import get_project_settings
-from multiprocessing import Process
 from ipproxy_pool.spiders.yourSpider.TestSpider import TestSpider
 settings = get_project_settings()
 

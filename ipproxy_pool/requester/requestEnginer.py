@@ -12,6 +12,8 @@ session = requests.Session()
 # 经过过滤之后的代理地址
 available_proxy_list = []
 
+logger = logging.getLogger()
+
 
 def do_get(url, headers, proxies):
     """
@@ -52,12 +54,12 @@ def filter_unavailable_proxy(proxy_list: list):
             try:
                 data = i.result()
             except Exception as e:
-                logging.error('%r 数据产生了错误: %s' % (f, e))
+                logger.error('%r 数据产生了错误: %s' % (f, e))
             else:
                 if data is not None:
                     available_proxy_list.append(data)
 
-    logging.info("=====  经过过滤后剩下 " + str(len(available_proxy_list)) + " 个代理  =====")
+    logger.info("=====  经过过滤后剩下 " + str(len(available_proxy_list)) + " 个代理  =====")
     return available_proxy_list
 
 
@@ -85,4 +87,4 @@ def filter_proxy(proxy_data):
         else:
             return None
     except Exception as e:
-        logging.error('验证代理ip失败 : %s' % e)
+        logger.error('验证代理ip失败 : %s' % e)

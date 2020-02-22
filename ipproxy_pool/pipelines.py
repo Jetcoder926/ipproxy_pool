@@ -15,6 +15,7 @@ class BaseProxyPipeline(object):
 
     def __init__(self, handle_num=THREADPOOL_NUM):
         self.handle_num = handle_num
+        self.logger = logging.getLogger()
 
     def open_spider(self, spider):
         from .db.MongodbManager import mongodbManager
@@ -39,9 +40,9 @@ class BaseProxyPipeline(object):
             try:
                 self.collection.insert_many(proxy_list)
             except errors.BulkWriteError as e:
-                logging.error('出现重复的数据: %s' % e)
+                self.logger.error('出现重复的数据: %s' % e)
             except Exception as e:
-                logging.error('插入mongo发生错误: %s' % e)
+                self.logger.error('插入mongo发生错误: %s' % e)
         else:
             pass
 
@@ -54,6 +55,7 @@ class XiciProxyPipeline(BaseProxyPipeline):
 class KuaidailiProxyPipeline(BaseProxyPipeline):
     def __init__(self):
         super().__init__(15)
+
 
 class SixsixProxyPipeline(BaseProxyPipeline):
     def __init__(self):

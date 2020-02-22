@@ -1,11 +1,10 @@
-import re
-import scrapy
+import scrapy,time
 from scrapy import Request
 from ipproxy_pool.items import IpproxyPoolItem
 
 from scrapy.selector import Selector
 
-num = 100
+num = 200
 port = 80
 
 
@@ -54,4 +53,5 @@ class SixsixSpider(scrapy.Spider):
             item['verify_time'] = ''
             item['failures_times'] = 0
             item['score'] = 10
+            item['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
             yield item

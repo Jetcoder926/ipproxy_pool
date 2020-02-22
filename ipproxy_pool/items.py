@@ -22,6 +22,7 @@ class IpproxyPoolItem(scrapy.Item):
     verify_time = scrapy.Field()
     failures_times = scrapy.Field()
     score = scrapy.Field()
+    created_time = scrapy.Field()
 
 
 

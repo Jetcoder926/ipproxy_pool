@@ -2,6 +2,7 @@ import pymongo, logging
 from ..config import config
 from pymongo import errors
 
+logger = logging.getLogger()
 
 class mongodbManager(object):
 
@@ -14,11 +15,11 @@ class mongodbManager(object):
             # PyMongo不是fork-safe,connect= False 解决父子进程间的复制
             return pymongo.MongoClient(config.MONGODB_URI, connect=False)
         except pymongo.errors.ConnectionFailure as e:
-            logging.error('无法连接 MongoDB: %s' % e)
+            logger.error('无法连接 MongoDB: %s' % e)
         except pymongo.errors.ServerSelectionTimeoutError as e:
-            logging.error('MongoDB 选择服务器超时: %s' % e)
+            logger.error('MongoDB 选择服务器超时: %s' % e)
         except Exception as e:
-            logging.error('连接 MongoDB发生错误: %s' % e)
+            logger.error('连接 MongoDB发生错误: %s' % e)
 
     def mongo_collection(self):
         return self.collection

@@ -16,7 +16,7 @@ class ProxyModel(object):
     def __init__(self):
         self.mongodbManager = mongodbManager(MONGODB_PROXY_DATABASE, MONGODB_PROXY_COLLECTION)
         self.mongodbCollection = self.mongodbManager.mongo_collection()
-
+        self.logger = logging.getLogger()
     def statistics_proxy(self):
         return self.mongodbCollection.count()
 
@@ -28,7 +28,7 @@ class ProxyModel(object):
                                                    update={"$inc": {'failures_times': 1}},
                                                    new=True)
         except Exception as e:
-            logging.error('代理ip: %s 添加失败次数失败, 原因: %s' % (ip, e))
+            self.logger.error('代理ip: %s 添加失败次数失败, 原因: %s' % (ip, e))
 
     def choice_proxy_ip(self):
         data = self.select_random_proxy(1)
@@ -53,7 +53,7 @@ class ProxyModel(object):
             self.mongodbCollection.find_and_modify({'ip_addr': ip, 'port': port}, update={"$inc": {"score": score}},
                                                    new=True)
         except Exception as e:
-            logging.error('代理ip: %s 减分失败, 原因: %s' % (ip, e))
+            self.logger.error('代理ip: %s 减分失败, 原因: %s' % (ip, e))
 
     def delete_proxy(self, proxy_ip):
         ip = proxy_ip.split(':')[0]
@@ -63,14 +63,15 @@ class ProxyModel(object):
             self.mongodbCollection.delete_one({"ip_addr": ip, "port": port})
 
         except Exception as e:
-            logging.error('代理ip: %s 删除失败, 原因: %s' % (ip, e))
+            self.logger.error('代理ip: %s 删除失败, 原因: %s' % (ip, e))
 
     def find_limit_and_delete(self, limit=THREADPOOL_NUM):
         data_list = list(self.mongodbCollection.find().limit(limit))
-        for info in data_list:
-            if info['score'] <= 5 or info['failures_times'] >= 5:
-                proxy_operating().delete_proxy(info['ip_addr']+':'+info['port'])
-                data_list.remove(info)
+        if data_list:
+            for info in data_list:
+                if info['score'] < 5:
+                    proxy_operating().delete_proxy(info['ip_addr']+':'+info['port'])
+                    data_list.remove(info)
 
         return data_list
 
