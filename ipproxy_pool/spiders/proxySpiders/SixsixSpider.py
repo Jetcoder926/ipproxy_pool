@@ -12,7 +12,7 @@ class SixsixSpider(scrapy.Spider):
     name = 'sixsixSpider'
     agent = '66代理'
     custom_settings = {
-
+        'HANDLE_NUM': num,
         'ITEM_PIPELINES': {
             'ipproxy_pool.pipelines.SixsixProxyPipeline': 1
         },

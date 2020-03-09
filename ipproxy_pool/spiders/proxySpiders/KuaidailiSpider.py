@@ -11,9 +11,9 @@ class kuaidailiSpider(scrapy.Spider):
     name = 'kuaidailiSpider'
     agent = '快代理'
     custom_settings = {
-
+        'HANDLE_NUM':15,
         'ITEM_PIPELINES': {
-            'ipproxy_pool.pipelines.KuaidailiProxyPipeline': 1
+            'ipproxy_pool.pipelines.ProxyPipeline': 1
         },
 
     }

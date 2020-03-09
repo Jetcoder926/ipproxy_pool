@@ -1,7 +1,7 @@
-
-import scrapy,time
+import scrapy, time
 from scrapy import Request
 from ipproxy_pool.items import IpproxyPoolItem
+from ipproxy_pool.config.config import THREADPOOL_NUM
 
 types = {'高匿': 0, '匿名': 1, '透明': 2}
 
@@ -10,11 +10,11 @@ class xiciSpider(scrapy.Spider):
     agent = '西刺'
     name = 'xiciSpider'
     custom_settings = {
-
+        'HANDLE_NUM': THREADPOOL_NUM,
         'ITEM_PIPELINES': {
             'ipproxy_pool.pipelines.XiciProxyPipeline': 1
         },
-        'DOWNLOADER_MIDDLEWARES':{}
+        'DOWNLOADER_MIDDLEWARES': {}
     }
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -58,6 +58,5 @@ class xiciSpider(scrapy.Spider):
 
         next_page_num = int(response.url[-1]) + 1
         if next_page_num <= 5:
-
             next_url = 'https://www.xicidaili.com/nn/' + str(next_page_num)
             yield Request(next_url, headers=self.headers, meta={'dont_retry': True})
