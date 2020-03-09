@@ -11,11 +11,18 @@ from ipproxy_pool.requester import requestEnginer
 from .config.config import MONGODB_PROXY_DATABASE, THREADPOOL_NUM, MONGODB_PROXY_COLLECTION
 
 
-class BaseProxyPipeline(object):
+class ProxyPipeline(object):
 
-    def __init__(self, handle_num=THREADPOOL_NUM):
+    def __init__(self, handle_num=THREADPOOL_NUM, logger=None):
         self.handle_num = handle_num
-        self.logger = logging.getLogger()
+        self.logger = logger
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            handle_num=crawler.settings.get('HANDLE_NUM'),
+            logger=logging.getLogger()
+        )
 
     def open_spider(self, spider):
         from .db.MongodbManager import mongodbManager
@@ -47,16 +54,3 @@ class BaseProxyPipeline(object):
             pass
 
 
-class XiciProxyPipeline(BaseProxyPipeline):
-    def __init__(self):
-        super().__init__()
-
-
-class KuaidailiProxyPipeline(BaseProxyPipeline):
-    def __init__(self):
-        super().__init__(15)
-
-
-class SixsixProxyPipeline(BaseProxyPipeline):
-    def __init__(self):
-        super().__init__()
