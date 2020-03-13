@@ -4,12 +4,14 @@ base_config = {
 }
 
 store_config = {
-    'db': 'mongodb',
+    'db': 'mongodb',  # 储存器
 
     'mongo_connect': {
         'database': 'kafka',
         'collection': '_offset',
-    }
+    },
+
+    'offset': 'both'  # 消费offset提交模式 可选: both、kafka、local
 }
 
 create_topic_config = {
@@ -21,12 +23,14 @@ producter_config = {
     'acks': 'all',
     'compression_type': 'gzip',
     'retries': 1,
-    'linger_ms': 10,
+    'linger_ms': 5,
     'max_request_size': 1048576,
     'buffer_memory': 33554432,
 }
 
 consumer_config = {
+
+    'consumer_timeout_ms': 50,  # 如果在指定时间（ms）间隔后没有消息可供使用，则向使用方抛出超时异常
     'enable_auto_commit': False
 }
 

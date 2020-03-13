@@ -7,35 +7,40 @@
 
 import json
 import logging
+from kafka.errors import KafkaError
 from ipproxy_pool.service.kafka_python import Product
-from .config.config import THREADPOOL_NUM
-
+from .config.config import THREADPOOL_NUM, KAFKA_PROXY_CONSUMER_TOPIC
 
 
 class ProxyPipeline(object):
 
-    def __init__(self, handle_num=THREADPOOL_NUM, logger=None, msg_key=None):
+    def __init__(self, client_id=None, handle_num=THREADPOOL_NUM, logger=None, msg_key=None):
         self.handle_num = handle_num
         self.logger = logger
         self.msg_key = msg_key
+        self.client_id = client_id
 
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
+            client_id=crawler.settings.get('CLIENT_ID'),
             handle_num=crawler.settings.get('HANDLE_NUM'),
             logger=logging.getLogger(),
             msg_key=bytes(crawler.settings.get('MSG_KEY', 'key1'), 'ascii'),
         )
 
     def open_spider(self, spider):
-
-        self.kafka_topic = 'proxy_topic'
-        self.product = Product(value_serializer=lambda m: json.dumps(m).encode('ascii'))
+        self.product = Product(value_serializer=lambda m: json.dumps(m).encode('ascii')).set_clientId(self.client_id)
 
     def close_spider(self, spider):
-        self.product.close()
+        self.product.engine.close()
 
     def process_item(self, item, spider):
-        self.product.product_send(self.kafka_topic, key=self.msg_key, value=dict(item))
+
+        pid = spider.crawler.settings.get('PARTITION_ID')   # 将消息发送至指定分区.前提是你要知道你的topic的分区id
+        self.product.product_send(KAFKA_PROXY_CONSUMER_TOPIC, key=self.msg_key, value=dict(item),
+                                  errorCall=lambda : self.logger.error(
+                                      'producter run failed in topic:%s , key:%s , value: %s' % (
+                                          KAFKA_PROXY_CONSUMER_TOPIC, self.msg_key, dict(item))), partition=pid)
 
         return item

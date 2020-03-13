@@ -11,6 +11,8 @@ class kuaidailiSpider(scrapy.Spider):
     name = 'kuaidailiSpider'
     agent = '快代理'
     custom_settings = {
+        'PARTITION_ID':2,
+        'CLIENT_ID' : name,
         'MSG_KEY': name,
         'HANDLE_NUM': num,
         'ITEM_PIPELINES': {

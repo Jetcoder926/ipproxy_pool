@@ -12,6 +12,8 @@ class xiciSpider(scrapy.Spider):
     agent = '西刺'
     name = 'xiciSpider'
     custom_settings = {
+        'PARTITION_ID': 1,
+        'CLIENT_ID': name,
         'MSG_KEY': name,
         'HANDLE_NUM': THREADPOOL_NUM,
         'ITEM_PIPELINES': {

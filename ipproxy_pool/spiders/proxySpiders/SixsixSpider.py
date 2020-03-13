@@ -12,6 +12,8 @@ class SixsixSpider(scrapy.Spider):
     name = 'sixsixSpider'
     agent = '66代理'
     custom_settings = {
+        'PARTITION_ID': 0,
+        'CLIENT_ID': name,
         'MSG_KEY': name,
         'HANDLE_NUM': num,
         'ITEM_PIPELINES': {

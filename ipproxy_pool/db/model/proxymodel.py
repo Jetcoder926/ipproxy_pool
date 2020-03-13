@@ -1,6 +1,6 @@
 from ..MongodbManager import mongodbManager
-from ipproxy_pool.config.config import MONGODB_PROXY_DATABASE
-from ipproxy_pool.config.config import MONGODB_PROXY_COLLECTION
+from ipproxy_pool.config.config import MONGODB_KAFKA_PROXY_DATABASE
+from ipproxy_pool.config.config import MONGODB_KAFKA_PROXY_COLLECTION
 from ipproxy_pool.config.config import THREADPOOL_NUM
 import logging
 
@@ -14,7 +14,7 @@ class ProxyModel(object):
         return cls._instance
 
     def __init__(self):
-        self.mongodbManager = mongodbManager(MONGODB_PROXY_DATABASE, MONGODB_PROXY_COLLECTION)
+        self.mongodbManager = mongodbManager(MONGODB_KAFKA_PROXY_DATABASE, MONGODB_KAFKA_PROXY_COLLECTION)
         self.mongodbCollection = self.mongodbManager.mongo_collection()
         self.logger = logging.getLogger()
 
