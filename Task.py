@@ -1,16 +1,19 @@
 import datetime, logging
+import concurrent.futures
 import multiprocessing
+import json
+from threading import Thread
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from apscheduler.jobstores.mongodb import MongoDBJobStore
 from apscheduler.schedulers.background import BackgroundScheduler, BlockingScheduler
-from ipproxy_pool.config.config import THREADPOOL_NUM, MONGODB_KAFKA_COLLECTION, MONGODB_KAFKA_DATABASE
+from ipproxy_pool.config.config import THREADPOOL_NUM, MONGODB_KAFKA_PROXY_DATABASE, MONGODB_KAFKA_PROXY_COLLECTION, \
+    KAFKA_PROXY_CONSUMER_TOPIC, CHECK_CONSUMER_PROXY_NOW
 from ipproxy_pool.db.MongodbManager import mongodbManager
 from ipproxy_pool.db.model.proxymodel import proxy_operating
 from ipproxy_pool.requester.requestEnginer import filter_proxy, filter_unavailable_proxy
 from ipproxy_pool.service.log import get_logger
 from ipproxy_pool.service.kafka_python import Consumer
-import json
 from pymongo import errors
 
 database = 'apscheduler_task'
@@ -66,8 +69,7 @@ def run_proxy_task():
                          day_of_week='mon-fri', hour=5, minute=30, end_date='2029-12-30',
                          id=check_ip_task_id)
 def __check_ip_availability(proxy_list):
-    import concurrent.futures
-    logger.info('开始定时任务')
+    logger.info('开始检查代理可用性任务')
     if proxy_list:
         with concurrent.futures.ThreadPoolExecutor(max_workers=THREADPOOL_NUM) as executor:
             future_data = {executor.submit(filter_proxy, proxy_data): proxy_data for proxy_data in proxy_list}
@@ -82,23 +84,73 @@ def __check_ip_availability(proxy_list):
                     if data is None:
                         proxy_operating().reduce_proxy_score(proxy_ip)
                         proxy_operating().plus_proxy_failure_time(proxy_ip)
-                        logger.info('代理ip %s 在检查连接可以性超时或返回错误' % proxy_ip)
+                        logger.warning('代理ip %s 在检查连接可以性超时或返回错误' % proxy_ip)
     else:
         logger.error('检查任务失败,ip代理池为空')
 
 
-# 入库操作运行于爬取任务的1分钟后
-@scheduler.scheduled_job('interval', days=1, id=explore_task_id, next_run_time=datetime.datetime.now()+datetime.timedelta(minutes=1))
+@scheduler.scheduled_job('interval', days=1, id=consumer_topic_task_id,
+                         next_run_time=datetime.datetime.now() + datetime.timedelta(minutes=1))
 def consumer_topic():
-    CP().consumer_topic()
+    CP().run_consumer()
+
+
+thread_proxy_list = []
 
 
 class CP(object):
+    threads = []
+
     def __init__(self):
         self.client = mongodbManager.mongo_client()
-        self.collection = mongodbManager(MONGODB_KAFKA_DATABASE, MONGODB_KAFKA_COLLECTION).mongo_collection()
+        self.collection = mongodbManager(MONGODB_KAFKA_PROXY_DATABASE,
+                                         MONGODB_KAFKA_PROXY_COLLECTION).mongo_collection()
         self.collection.create_index('ip_addr', unique=True)
-        self.topic = 'proxy_topic'
+        self.topic = KAFKA_PROXY_CONSUMER_TOPIC
+        self.partitions = Consumer().engine.partitions_for_topic(self.topic)  # topic的分区数:list
+        self.group_id = 'ap_task'
+        self.Consumer = Consumer(group_id=self.group_id,
+                                 consumer_timeout_ms=50,
+                                 value_deserializer=lambda m: json.loads(m.decode('ascii')))
+
+    def run_consumer(self):
+
+        for p in self.partitions:
+            try:
+                t = Thread(target=self.consumer_topic,
+                           args=(
+                               [{"topic": self.topic, "partition": p,
+                                 "thread_id": "threadID_%s" % p}]))
+                t.start()
+                t.join()
+
+                if CHECK_CONSUMER_PROXY_NOW:
+                    proxy_list = filter_unavailable_proxy(thread_proxy_list, workers=len(thread_proxy_list))
+                else:
+                    proxy_list = thread_proxy_list
+                logger.warning(proxy_list)
+                self._insert_mongo(proxy_lists=proxy_list)
+            except:
+                logger.error(
+                    "Error: failed to run consumer thread in tid: %s,topic:%s,partition:%s" % (p, self.topic, p))
+
+    def consumer_topic(self, topics_partition: dict):
+
+        thread_proxy_list.clear()
+
+        messages = self.Consumer.set_clientId(topics_partition['thread_id']).assign_partition([topics_partition])
+
+        c = messages.topic_consumer()
+        while True:
+            for v in c:
+                messages.commit_offset(group_id=self.group_id, topic=v.topic, partition=v.partition,
+                                       offset=v.offset)
+                value = v.value
+                # 多线程消费排序问题.根据timestamp排序
+                value.update({'timestamp': v.timestamp, "offset": v.offset})
+                thread_proxy_list.append(value)
+
+            return thread_proxy_list
 
     def _insert_mongo(self, proxy_lists: list):
         if proxy_lists:
@@ -111,26 +163,11 @@ class CP(object):
         else:
             pass
 
-    def consumer_topic(self):
-        messages = Consumer(group_id='ap_task',
-                            value_deserializer=lambda m: json.loads(m.decode('ascii'))).assign_partition([
-            {'topic': self.topic, 'partition': 0},
-            {'topic': self.topic, 'partition': 1},
-            {'topic': self.topic, 'partition': 2},
-        ]).topic_consumer()
-
-        proxy_list = []
-        for m in messages:
-            proxy_list.append(m.value)
-
-        filtered_proxy = filter_unavailable_proxy(proxy_list, workers=len(proxy_list))
-
-        self._insert_mongo(proxy_lists=filtered_proxy)
-
 
 def close_task():
-    mongodbManager(database, collection).mongo_collection().delete_one({'_id': explore_task_id})
-    mongodbManager(database, collection).mongo_collection().delete_one({'_id': check_ip_task_id})
+    for i in [explore_task_id, check_ip_task_id, consumer_topic_task_id]:
+        mongodbManager(database, collection).mongo_collection().delete_one({'_id': i})
+
     return
 
 
