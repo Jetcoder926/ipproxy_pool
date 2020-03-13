@@ -14,8 +14,6 @@ def get_log_config():
 
 
 MONGODB_URI = 'mongodb://root:aa123456@127.0.0.1:17017/'
-# MONGODB_PROXY_DATABASE = 'proxy'
-# MONGODB_PROXY_COLLECTION = 'proxy_list'
 
 # kafka 消费数据存放库
 MONGODB_KAFKA_PROXY_DATABASE = 'kafka'
