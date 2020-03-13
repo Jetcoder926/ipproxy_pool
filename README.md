@@ -6,7 +6,7 @@
 
 >## 项目说明
 
-##### 项目采用mongodb作为database,&emsp;kafka作为MQ系统
+项目采用mongodb作为database,&emsp;kafka作为MQ系统
 
 ### 特点
 * 多线程消费MQ,采用database管理MQ位移值

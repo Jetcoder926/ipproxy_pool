@@ -12,7 +12,6 @@ def start_spider():
         process.crawl(spider)
     process.start()
 
-
 if __name__ == "__main__":
     get_log_config()
     your_spiders_list = [TestSpider, ]
