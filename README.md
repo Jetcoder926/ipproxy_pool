@@ -34,11 +34,14 @@
 ### 2 配置
 1.修改config目录下`config.py`,`kafka_config.py`文件中的mongodb连接配置 <br/>
 2.在你需要代理的自定义爬虫项目里的Request方法加上`meta={'proxy':''}`参数<br/>
-3.启动代理ip爬虫方式: <br/>
-&emsp;3.1 进入项目根目录<br/>
-&emsp;3.2 chmod +x task.sh<br/>
-&emsp;3.3 ./tash.sh start 启动任务脚本. 停止脚本的命令: ./task.sh stop
-4.修改`EngineStar.py`里的 your_spiders_list AND 运行`EngineStar.py`即可<br/>
+
+### 3启动代理ip爬虫
+1 进入项目根目录<br/>
+2 chmod +x task.sh<br/>
+3 `./tash.sh start` 启动任务脚本. 停止脚本的命令: `./task.sh stop`<br>
+
+### 4启动自定义爬虫
+修改`EngineStar.py`里的 your_spiders_list 并运行`EngineStar.py`即可<br>
 <br>
 >## 参考资料
 https://www.osgeo.cn/scrapy/index.html<br/>
