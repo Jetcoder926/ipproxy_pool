@@ -37,7 +37,7 @@ class ProxyPipeline(object):
 
     def process_item(self, item, spider):
 
-        pid = spider.crawler.settings.get('PARTITION_ID')   # 将消息发送至指定分区.前提是你要知道你的topic的分区id
+        pid = spider.crawler.settings.get('PARTITION_ID')   # 将消息发送至指定分区.一般情况kafka自动分配即可
         self.product.product_send(KAFKA_PROXY_CONSUMER_TOPIC, key=self.msg_key, value=dict(item),
                                   errorCall=lambda : self.logger.error(
                                       'producter run failed in topic:%s , key:%s , value: %s' % (
