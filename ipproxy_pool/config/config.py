@@ -33,7 +33,7 @@ Validated_url = 'http://httpbin.org/get'
 
 
 
-# 验证代理地址的线程池的总数
+# 验证代理地址的线程池的总数默认值
 THREADPOOL_NUM = 50
 
 
